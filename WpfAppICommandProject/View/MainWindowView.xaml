@@ -1,0 +1,76 @@
+﻿<Window x:Class="MVVMwithWPFProject.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MVVMwithWPFProject"
+        xmlns:NamespaceVM="clr-namespace:MVVMwithWPFProject.ViewModel"
+        mc:Ignorable="d"
+        Title="MVVM with WPF Application" Height="450" Width="500" 
+        Icon="/WpfAppICommandProject;component/SupportContent/Files/TLLogo-B-Color-100W_QD.png">
+    <Window.Resources>
+        <NamespaceVM:EmployeeViewModel x:Key="employeeViewModel"/>
+        <NamespaceVM:ValueConverterIntDaysToString x:Key="valueConverterIntToString"/>
+    </Window.Resources>
+    <Window.Background>
+        <ImageBrush ImageSource="/WpfAppICommandProject;component/SupportContent/Files/TL00-04 BG W.jpg"/>
+    </Window.Background>
+
+    <Grid x:Name="grdEmployees" DataContext="{Binding employeeViewModel}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <ListView ItemsSource="{Binding Employees}"
+                  SelectedItem="{Binding SelectedEmployee, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                  SelectionMode="Extended"
+                  Name="lstEmployees" Grid.Column="0" Grid.Row="0" Margin="5">
+            <ListView.View>
+                <GridView x:Name="gvEmployees">
+                    <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ID}"/>
+                    <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}"/>
+                    <GridViewColumn Header="Last Name" DisplayMemberBinding="{Binding LastName}"/>
+                    <GridViewColumn Header="Base Salary (R$)" DisplayMemberBinding="{Binding BaseSalary}"/>
+                    <GridViewColumn Header="Bonus?" DisplayMemberBinding="{Binding ReceiveBonusPerDayWorked}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <StackPanel Grid.Row="0" Grid.Column="1">
+            <TextBlock Text="Selected Employee" HorizontalAlignment="Center" Margin="5" FontWeight="Bold"/>
+            <!---->
+            <TextBlock Text="Name" Margin="5"/>
+            <!-- Optional:
+            <TextBox x:Name="txtName" Text="{Binding ElementName=lstEmployees,Path=SelectedItem.FirstName}" Margin="5,0,5,0"/>
+            -->
+            <TextBox x:Name="txtFirstName" Text="{Binding SelectedEmployee.FirstName}" Margin="5,0,5,0"/>
+            <!---->
+            <TextBlock Text="Last Name" Margin="5"/>
+            <TextBox x:Name="txtLastName" Text="{Binding SelectedEmployee.LastName}" Margin="5,0,5,0"/>
+            <!---->
+            <TextBlock Text="Base Salary" Margin="5"/>
+            <TextBox x:Name="txtBaseSalary" Text="{Binding SelectedEmployee.BaseSalary,
+                StringFormat={}R$ {0:0.00}}" Margin="5,0,5,0"/>
+            <!---->
+            <TextBlock Text="Days Worked" Margin="5"/>
+            <TextBox x:Name="txtDaysWorked" Text="{Binding SelectedEmployee.DaysWorked,
+                Converter={StaticResource valueConverterIntToString}}" Margin="5,0,5,0"/>
+            <!---->
+            <TextBlock Text="Bonus per Day Worked" Margin="5"/>
+            <TextBox x:Name="txtBonusPerDayWorked" Text="{Binding SelectedEmployee.BonusPerDayWorked,
+                StringFormat={}R$ {0:0.00}}" Margin="5,0,5,0"/>
+            <!---->
+            <Button x:Name="btnTotalSalary" Margin="5" Click="BtnTotalSalary_Click">
+                _Compute Total Salary
+            </Button>
+            <!---->
+            <TextBlock Text="Total Salary" Margin="5"/>
+            <TextBox x:Name="txtTotalSalary" Text="0" Margin="5,0,5,0"/>
+        </StackPanel>
+        
+    </Grid>
+</Window>

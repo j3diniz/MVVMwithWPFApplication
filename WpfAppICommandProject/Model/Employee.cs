@@ -72,6 +72,14 @@ namespace MVVMwithWPFProject.Model {
             set { bonusPerDayWorked = value; }
         }
 
+        private double totalSalary;
+
+        public double TotalSalary {
+            get { return totalSalary; }
+            set { totalSalary = value; }
+        }
+
+
         public Employee() {
         }
 

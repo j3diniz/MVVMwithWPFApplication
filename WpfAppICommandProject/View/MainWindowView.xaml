@@ -8,13 +8,13 @@
         mc:Ignorable="d"
         Title="MVVM with WPF Application" Height="450" Width="500" 
         Icon="/WpfAppICommandProject;component/SupportContent/Files/TLLogo-B-Color-100W_QD.png">
-    <Window.Resources>
-        <NamespaceVM:EmployeeViewModel x:Key="employeeViewModel"/>
-        <NamespaceVM:ValueConverterIntDaysToString x:Key="valueConverterIntToString"/>
-    </Window.Resources>
     <Window.Background>
         <ImageBrush ImageSource="/WpfAppICommandProject;component/SupportContent/Files/TL00-04 BG W.jpg"/>
     </Window.Background>
+    <Window.Resources>
+        <NamespaceVM:EmployeeViewModel x:Key="employeeViewModel"/>
+        <NamespaceVM:ValueConverterIntDaysToString x:Key="valueConverterIntDayToString"/>
+    </Window.Resources>
 
     <Grid x:Name="grdEmployees" DataContext="{Binding employeeViewModel}">
         <Grid.ColumnDefinitions>
@@ -35,7 +35,26 @@
                     <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}"/>
                     <GridViewColumn Header="Last Name" DisplayMemberBinding="{Binding LastName}"/>
                     <GridViewColumn Header="Base Salary (R$)" DisplayMemberBinding="{Binding BaseSalary}"/>
-                    <GridViewColumn Header="Bonus?" DisplayMemberBinding="{Binding ReceiveBonusPerDayWorked}"/>
+                    <GridViewColumn Header="Bonus?">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding ReceiveBonusPerDayWorked}">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ReceiveBonusPerDayWorked}" Value="False">
+                                                    <Setter Property="Foreground" Value="Red" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding ReceiveBonusPerDayWorked}" Value="True">
+                                                    <Setter Property="Foreground" Value="Blue" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>
@@ -58,18 +77,22 @@
             <!---->
             <TextBlock Text="Days Worked" Margin="5"/>
             <TextBox x:Name="txtDaysWorked" Text="{Binding SelectedEmployee.DaysWorked,
-                Converter={StaticResource valueConverterIntToString}}" Margin="5,0,5,0"/>
+                Converter={StaticResource valueConverterIntDayToString}}" Margin="5,0,5,0"/>
             <!---->
             <TextBlock Text="Bonus per Day Worked" Margin="5"/>
             <TextBox x:Name="txtBonusPerDayWorked" Text="{Binding SelectedEmployee.BonusPerDayWorked,
                 StringFormat={}R$ {0:0.00}}" Margin="5,0,5,0"/>
             <!---->
-            <Button x:Name="btnTotalSalary" Margin="5" Click="BtnTotalSalary_Click">
+            <Separator Margin="5,18,5,15"/>
+            <!---->
+            <Button x:Name="btnTotalSalary" Margin="5" Command="{Binding CalculateSalaryCommand}"
+                    CommandParameter="{Binding SelectedEmployee.FirstName}">
                 _Compute Total Salary
             </Button>
             <!---->
             <TextBlock Text="Total Salary" Margin="5"/>
-            <TextBox x:Name="txtTotalSalary" Text="0" Margin="5,0,5,0"/>
+            <TextBox x:Name="txtTotalSalary" Text="{Binding SelectedEmployee.TotalSalary, Mode=TwoWay,
+                StringFormat={}R$ {0:0.00}}" Margin="5,0,5,0"/>
         </StackPanel>
         
     </Grid>

@@ -5,7 +5,9 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using MVVMwithWPFProject.Model;
+using WpfAppICommandProject.ViewModel.Command;
 
 namespace MVVMwithWPFProject.ViewModel {
     public class EmployeeViewModel : INotifyPropertyChanged {
@@ -36,6 +38,7 @@ namespace MVVMwithWPFProject.ViewModel {
 
         public EmployeeViewModel() {
             //SelectedEmployee = new Employee(1, "Joel", "Diniz", 5000, 20, true, 100f);
+            CalculateSalaryCommand = new CalculateSalaryCommand(this);
         }
 
         /// <summary>
@@ -45,12 +48,31 @@ namespace MVVMwithWPFProject.ViewModel {
             employees = new ObservableCollection<Employee>(){
                 new Employee(1, "Joel", "Diniz", 5000, 20, true, 100f),
                 new Employee(2, "Edson", "Andrade", 10000, 10, true, 100f),
-                new Employee(3, "Jade", "Diniz", 1000, 0, false, 100f)
+                new Employee(3, "Jade", "Diniz", 1000, 0, false, 0f)
             };
             this.Employees = employees;
         }
 
+        public CalculateSalaryCommand CalculateSalaryCommand { get; set; }
 
+        public void CalculateSalary() {
+
+            if (SelectedEmployee != null) {
+
+                // (Total Salary) = (Days Worked) * (Bonus per Day Worked) + (Base Salary)
+                SelectedEmployee.TotalSalary = (SelectedEmployee.DaysWorked * SelectedEmployee.BonusPerDayWorked)+SelectedEmployee.BaseSalary;
+                this.SelectedEmployee = SelectedEmployee;
+
+                // Teste if this employee receives bonus
+                if (!SelectedEmployee.ReceiveBonusPerDayWorked) {
+                    MessageBox.Show("This employee does not receive bonus!");
+                }
+
+            } else {
+                MessageBox.Show("No employee selected!");
+            }
+
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propertyName) {

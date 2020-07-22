@@ -23,15 +23,14 @@ namespace MVVMwithWPFProject {
     public partial class MainWindow : Window {
         private EmployeeViewModel employeeViewModel;
         public MainWindow() {
+
             InitializeComponent();
+
             employeeViewModel = new EmployeeViewModel();
+
             // Adding itens just to test
             employeeViewModel.DefaultEmployees();
             grdEmployees.DataContext = employeeViewModel;
-        }
-
-        private void BtnTotalSalary_Click(object sender, RoutedEventArgs e) {
-            // TODO: Implement ICommand here
         }
     }
 }

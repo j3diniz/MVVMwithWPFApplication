@@ -16,84 +16,94 @@
         <NamespaceVM:ValueConverterIntDaysToString x:Key="valueConverterIntDayToString"/>
     </Window.Resources>
 
-    <Grid x:Name="grdEmployees" DataContext="{Binding employeeViewModel}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+    <StackPanel>
 
-        <ListView ItemsSource="{Binding Employees}"
-                  SelectedItem="{Binding SelectedEmployee, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                  SelectionMode="Extended"
+        <Menu Height="21" Margin="0">
+            <MenuItem Header="_File">
+                <MenuItem Header="E_xit" Click="mnuExit_Click"/>
+            </MenuItem>
+        </Menu>
+
+        <Grid x:Name="grdEmployees" DataContext="{Binding employeeViewModel}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <ListView ItemsSource="{Binding Employees}"
+                  SelectedItem="{Binding SelectedEmployee, Mode=TwoWay,
+                  UpdateSourceTrigger=PropertyChanged}"
+                  SelectionMode="Single"
                   Name="lstEmployees" Grid.Column="0" Grid.Row="0" Margin="5">
-            <ListView.View>
-                <GridView x:Name="gvEmployees">
-                    <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ID}"/>
-                    <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}"/>
-                    <GridViewColumn Header="Last Name" DisplayMemberBinding="{Binding LastName}"/>
-                    <GridViewColumn Header="Base Salary (R$)" DisplayMemberBinding="{Binding BaseSalary}"/>
-                    <GridViewColumn Header="Bonus?">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding ReceiveBonusPerDayWorked}">
-                                    <TextBlock.Style>
-                                        <Style TargetType="TextBlock">
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding ReceiveBonusPerDayWorked}" Value="False">
-                                                    <Setter Property="Foreground" Value="Red" />
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding ReceiveBonusPerDayWorked}" Value="True">
-                                                    <Setter Property="Foreground" Value="Blue" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-        </ListView>
+                <ListView.View>
+                    <GridView x:Name="gvEmployees">
+                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ID}"/>
+                        <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}"/>
+                        <GridViewColumn Header="Last Name" DisplayMemberBinding="{Binding LastName}"/>
+                        <GridViewColumn Header="Base Salary (R$)" DisplayMemberBinding="{Binding BaseSalary}"/>
+                        <GridViewColumn Header="Bonus?">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding ReceiveBonusPerDayWorked}">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ReceiveBonusPerDayWorked}" Value="False">
+                                                        <Setter Property="Foreground" Value="Red" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding ReceiveBonusPerDayWorked}" Value="True">
+                                                        <Setter Property="Foreground" Value="Blue" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
 
-        <StackPanel Grid.Row="0" Grid.Column="1">
-            <TextBlock Text="Selected Employee" HorizontalAlignment="Center" Margin="5" FontWeight="Bold"/>
-            <!---->
-            <TextBlock Text="Name" Margin="5"/>
-            <!-- Optional:
+            <StackPanel Grid.Row="0" Grid.Column="1">
+                <TextBlock Text="Selected Employee" HorizontalAlignment="Center" Margin="5" FontWeight="Bold"/>
+                <!---->
+                <TextBlock Text="Name" Margin="5"/>
+                <!-- Optional:
             <TextBox x:Name="txtName" Text="{Binding ElementName=lstEmployees,Path=SelectedItem.FirstName}" Margin="5,0,5,0"/>
             -->
-            <TextBox x:Name="txtFirstName" Text="{Binding SelectedEmployee.FirstName}" Margin="5,0,5,0"/>
-            <!---->
-            <TextBlock Text="Last Name" Margin="5"/>
-            <TextBox x:Name="txtLastName" Text="{Binding SelectedEmployee.LastName}" Margin="5,0,5,0"/>
-            <!---->
-            <TextBlock Text="Base Salary" Margin="5"/>
-            <TextBox x:Name="txtBaseSalary" Text="{Binding SelectedEmployee.BaseSalary,
+                <TextBox x:Name="txtFirstName" Text="{Binding SelectedEmployee.FirstName}" Margin="5,0,5,0"/>
+                <!---->
+                <TextBlock Text="Last Name" Margin="5"/>
+                <TextBox x:Name="txtLastName" Text="{Binding SelectedEmployee.LastName}" Margin="5,0,5,0"/>
+                <!---->
+                <TextBlock Text="Base Salary" Margin="5"/>
+                <TextBox x:Name="txtBaseSalary" Text="{Binding SelectedEmployee.BaseSalary,
                 StringFormat={}R$ {0:0.00}}" Margin="5,0,5,0"/>
-            <!---->
-            <TextBlock Text="Days Worked" Margin="5"/>
-            <TextBox x:Name="txtDaysWorked" Text="{Binding SelectedEmployee.DaysWorked,
+                <!---->
+                <TextBlock Text="Days Worked" Margin="5"/>
+                <TextBox x:Name="txtDaysWorked" Text="{Binding SelectedEmployee.DaysWorked,
                 Converter={StaticResource valueConverterIntDayToString}}" Margin="5,0,5,0"/>
-            <!---->
-            <TextBlock Text="Bonus per Day Worked" Margin="5"/>
-            <TextBox x:Name="txtBonusPerDayWorked" Text="{Binding SelectedEmployee.BonusPerDayWorked,
+                <!---->
+                <TextBlock Text="Bonus per Day Worked" Margin="5"/>
+                <TextBox x:Name="txtBonusPerDayWorked" Text="{Binding SelectedEmployee.BonusPerDayWorked,
                 StringFormat={}R$ {0:0.00}}" Margin="5,0,5,0"/>
-            <!---->
-            <Separator Margin="5,18,5,15"/>
-            <!---->
-            <Button x:Name="btnTotalSalary" Margin="5" Command="{Binding CalculateSalaryCommand}"
+                <!---->
+                <Separator Margin="5,18,5,15"/>
+                <!---->
+                <Button x:Name="btnTotalSalary" Margin="5" Command="{Binding CalculateSalaryCommand}"
                     CommandParameter="{Binding SelectedEmployee.FirstName}">
-                _Compute Total Salary
-            </Button>
-            <!---->
-            <TextBlock Text="Total Salary" Margin="5"/>
-            <TextBox x:Name="txtTotalSalary" Text="{Binding SelectedEmployee.TotalSalary, Mode=TwoWay,
+                    _Compute Total Salary
+                </Button>
+                <!---->
+                <TextBlock Text="Total Salary" Margin="5"/>
+                <TextBox x:Name="txtTotalSalary" Text="{Binding SelectedEmployee.TotalSalary, Mode=TwoWay,
                 StringFormat={}R$ {0:0.00}}" Margin="5,0,5,0"/>
-        </StackPanel>
-        
-    </Grid>
+            </StackPanel>
+
+        </Grid>
+    </StackPanel>
 </Window>

@@ -32,5 +32,9 @@ namespace MVVMwithWPFProject {
             employeeViewModel.DefaultEmployees();
             grdEmployees.DataContext = employeeViewModel;
         }
+
+        private void mnuExit_Click(object sender, RoutedEventArgs e) {
+            this.Close();
+        }
     }
 }
